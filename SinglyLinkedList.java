@@ -101,9 +101,35 @@ public class SinglyLinkedList<E extends Comparable<E>> {
 
     // write your codes here
     public void swap(){
+
+        // SLL -> arr[] (unsorted)
+        Node<E>[] nodes = (Node<E>[]) new Node[size];
+        Node<E> walker = head;
+        for (int i = 0; i < size; i++) {
+            nodes[i] = walker;
+            walker = walker.getNext();
+        }
         
+        // sort nodes[] indexes by node element
+        Integer[] indexes = new Integer[size];
+        for (int i = 0; i < size ; i++) 
+            indexes[i] = i;
+        Arrays.sort(indexes, (a,b) -> nodes[a].getElement().compareTo(
+                                     (nodes[b].getElement())));
 
+        // swap indexes from both ends - smallest <-> largest
+        for (int i = 0, j = size-1; i < j; i++, j--) {
+            Node<E> temp = nodes[indexes[i]];
+            nodes[indexes[i]] = nodes[indexes[j]];
+            nodes[indexes[j]] = temp;
+        }
+        
+        // reassign head, tail, each .next
+        head = nodes[0];
+        tail = nodes[size-1];
+        tail.setNext(null);
+        for (int k = 1; k < size; k++)
+            nodes[k-1].setNext(nodes[k]);
+        
     }
-   
 }
-
